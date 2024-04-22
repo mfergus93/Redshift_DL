@@ -9,7 +9,10 @@ import cv2
 import numpy as np
 
 
-folder_path= r'D:\galactic_images_raw'
+# folder_path= r'D:\galactic_images_raw'
+folder_path=os.path.dirname(os.path.realpath(__file__))
+os.chdir(folder_path)
+image=cv2.imread('flood_fill_test.png', cv2.IMREAD_GRAYSCALE)
 
 for filename in os.listdir(folder_path):
     if filename.endswith('.jpg') or filename.endswith('.png'):
@@ -32,7 +35,7 @@ for filename in os.listdir(folder_path):
         mask = np.zeros((img.shape[0] + 2, img.shape[1] + 2), np.uint8)
         
         # Flood fill operation
-        cv2.floodFill(bin_img, mask, seed_point, 255, 20, 5)
+        cv2.floodFill(bin_img, None, seed_point, 255, 10, 0)
         
         # Invert the mask to get the filled region
         filled_region = cv2.bitwise_not(mask)[1:-1, 1:-1]

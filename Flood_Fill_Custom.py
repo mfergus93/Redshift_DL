@@ -24,7 +24,9 @@ def flood_fill(image, seed_point, new_value, lo_diff, up_diff):
 
     mask = np.zeros_like(image)  # Mask to track filled pixels
 
-    flood_fill_recursive(image, seed_point[0], seed_point[1], old_value, new_value, mask, lo_diff, up_diff)
+    image=flood_fill_recursive(image, seed_point[0], seed_point[1], old_value, new_value, mask, lo_diff, up_diff)
+    
+    return image
 
 # # Load a grayscale image
 # image = cv2.imread('path_to_your_grayscale_image.jpg', cv2.IMREAD_GRAYSCALE)
@@ -40,16 +42,21 @@ def flood_fill(image, seed_point, new_value, lo_diff, up_diff):
 #         # img=cv2.GaussianBlur(img,(3,3),0)
 #         image=o_img.astype(np.uint8)
         
-        
-image=cv2.imread(r'D:\flood_fill_test.png', cv2.IMREAD_GRAYSCALE)
 
-    seed_point = (image.shape[1] // 2, image.shape[0] // 2)
-    new_value = 255  # New intensity value for flood fill
-    lo_diff = 10
-    up_diff = 10
 
-    flood_fill(image, seed_point, new_value, lo_diff, up_diff)
+path=os.path.dirname(os.path.realpath(__file__))
+os.chdir(path)
+image=cv2.imread('flood_fill_test.png', cv2.IMREAD_GRAYSCALE)
 
-    cv2.imshow("Filled Image", image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+
+
+seed_point = (image.shape[1] // 2, image.shape[0] // 2)
+new_value = 255  # New intensity value for flood fill
+lo_diff = 10
+up_diff = 10
+
+image=flood_fill(image, seed_point, new_value, lo_diff, up_diff)
+
+cv2.imshow("Filled Image", image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
