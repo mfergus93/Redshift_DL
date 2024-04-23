@@ -36,8 +36,8 @@ for filename in os.listdir(folder_path):
         seed_point = (img.shape[1] // 2, img.shape[0] // 2)
         
         # Flood fill operation
-        cv2.floodFill(image=img, mask=mask, seedPoint=seed_point, newVal=255, \
-                      loDiff=20, upDiff=2, flags= 8 | ( 125 << 8 ))
+        cv2.floodFill(image=img, mask=None, seedPoint=seed_point, newVal=255, \
+                      loDiff=50, upDiff=2, flags= 8 | ( 125 << 8 ) | cv2.FLOODFILL_FIXED_RANGE)
         
         # Invert the mask to get the filled region
         # filled_region = cv2.bitwise_not(mask)[1:-1, 1:-1]
