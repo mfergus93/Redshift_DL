@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 # Read the image
-img = cv2.imread(r'D:\galactic_images\299491326712375296.jpg',cv2.IMREAD_GRAYSCALE)
+# img = cv2.imread(r'D:\galactic_images\299491326712375296.jpg',cv2.IMREAD_GRAYSCALE)
 
 def pavlidis(img): #pass me a binarized image and I will trace the outline
     
@@ -114,29 +114,29 @@ def fillarea(ctr):
     area = np.sum(areaImage)/128
     return area
 
-folder_path= r'D:\galactic_images_raw'
+# folder_path= r'D:\galactic_images_raw'
 
-# for filename in os.listdir(folder_path):
-#     if filename.endswith('.jpg') or filename.endswith('.png'):
+# # for filename in os.listdir(folder_path):
+# #     if filename.endswith('.jpg') or filename.endswith('.png'):
         
-filename='1195806900076177408.jpg'
-file_path = os.path.join(folder_path, filename)
-image=cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
+# filename='1195806900076177408.jpg'
+# file_path = os.path.join(folder_path, filename)
+# image=cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
 
-t_value=25
-_, bin_img=cv2.threshold(image, t_value, 255, cv2.THRESH_BINARY)
+# t_value=25
+# _, bin_img=cv2.threshold(image, t_value, 255, cv2.THRESH_BINARY)
 
-cv2.imshow('bin', bin_img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# cv2.imshow('bin', bin_img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 
-contour=pavlidis(bin_img)
+# contour=pavlidis(bin_img)
 
-xc=np.float64(contour[:,1])
-yc=np.float64(contour[:,0])
+# xc=np.float64(contour[:,1])
+# yc=np.float64(contour[:,0])
 
-blank_img=np.zeros(img.shape[:2])
-ctr_img=cv2.polylines(blank_img,[contour], True, 255,1)
+# blank_img=np.zeros(img.shape[:2])
+# ctr_img=cv2.polylines(blank_img,[contour], True, 255,1)
 
-cv2.floodFill(ctr_img, None, (256,256), 255)
+# cv2.floodFill(ctr_img, None, (256,256), 255)
 
