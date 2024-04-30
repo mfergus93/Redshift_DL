@@ -6,11 +6,11 @@ import pandas as pd
 
 from Flood_Fill import flood_fill
 from Outlining import pavlidis, fillarea
-from y_network import y_network
+# from y_network import y_network
 from color_Features import extract_color_histogram
 
 
-labels = pd.read_csv(r'C:\Users\Matt\Desktop\dev\galaxy.csv')
+# labels = pd.read_csv(r'C:\Users\Matt\Desktop\dev\galaxy.csv')
 
 # folder_path= r'D:\galactic_images_raw'
 folder_path=os.path.dirname(os.path.realpath(__file__))
@@ -21,7 +21,7 @@ image_dir=r'D:\galactic_images_raw'
 def preprocess_directory(path):
     
     for filename in os.listdir(path):
-        if filename.endswith('.jpg') or filename.endswith('.png'):
+        if filename.endswith('.jpg'):# or filename.endswith('.png'):
             
             file_path = os.path.join(path, filename)
             img=cv2.imread(file_path)
@@ -37,7 +37,7 @@ def preprocess_directory(path):
             return img, flood_img, histogram
             
             
-img, flood_img, histogram = preprocess_directory(image_dir)
+img, flood_img, histogram = preprocess_directory(folder_path)
 
 cv2.imshow('img', img)
 cv2.imshow('region', flood_img)
