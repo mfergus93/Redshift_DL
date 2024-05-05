@@ -4,9 +4,9 @@ import numpy as np
 import requests
 import time
 
-start_time=time.time()
-
-df = pd.read_csv(r'C:\Users\Matt\Desktop\dev\galaxy.csv')
+folder_path=os.path.dirname(os.path.realpath(__file__))
+os.chdir(folder_path)
+df = pd.read_csv(r'galaxy.csv')
 cm = df.corr()
 
 def save_image_from_api(ra, dec, width, height, opt, path='./images/', image_id='image_001'):
