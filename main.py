@@ -44,3 +44,26 @@ cv2.imshow('region', flood_img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+# Define your model
+model = Sequential([
+    Dense(64, activation='relu', input_shape=(input_shape,)),
+    Dropout(0.2),  # Optional: helps prevent overfitting
+    Dense(32, activation='relu'),
+    Dropout(0.2),
+    Dense(1)  # Output layer with 1 neuron for regression
+])
+
+# Compile the model
+model.compile(optimizer='adam', loss='mean_squared_error')
+
+# Train the model
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_val, y_val))
+
+# Evaluate the model
+loss = model.evaluate(X_test, y_test)
+print(f'Test loss: {loss}')
+

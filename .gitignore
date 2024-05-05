@@ -1,3 +1,6 @@
 .spyproject/
 .spyproject/config/backups/workspace.ini.bak
 .spyproject/config/workspace.ini
+.spyproject/config/backups/workspace.ini.bak
+/.spyproject
+/.spyproject
