@@ -69,7 +69,3 @@ for index, row in df.head(100).iterrows():
     if index%100==0:
         print(index)
     
-end_time = time.time()
-
-elapsed_time= end_time - start_time
-print("Script runtime:", elapsed_time, "seconds")
