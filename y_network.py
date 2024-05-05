@@ -1,13 +1,16 @@
 #y_network
-img_size=64
-import tensorflow as tf
-from matplotlib import pyplot as plt
-from tensorflow.keras.models import Model
 
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Input, Flatten, concatenate
 
 #ynetwork function
 def y_network(x_train, x_test, y_train, y_test, epochs, layer, optimizer, dropout):
+    
+    img_size=64
+    import tensorflow as tf
+    from matplotlib import pyplot as plt
+    from tensorflow.keras.models import Model
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Input, Flatten, concatenate
+    
+    
     tf.keras.backend.clear_session()
 
     input_shape= (img_size, img_size, 3)
