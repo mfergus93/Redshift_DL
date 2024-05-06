@@ -1,3 +1,5 @@
+# https://skyserver.sdss.org/dr16/en/help/docs/api.aspx
+
 import pandas as pd
 import os
 import numpy as np
@@ -7,7 +9,6 @@ import time
 folder_path=os.path.dirname(os.path.realpath(__file__))
 os.chdir(folder_path)
 df = pd.read_csv(r'galaxy.csv')
-cm = df.corr()
 
 def save_image_from_api(ra, dec, width, height, opt, path='./images/', image_id='image_001'):
     
@@ -26,6 +27,7 @@ def save_image_from_api(ra, dec, width, height, opt, path='./images/', image_id=
 
     # API URL
     api_url = 'https://skyserver.sdss.org/dr14/SkyServerWS/ImgCutout/getjpeg'
+    
 
     # Parameters
     params = {
@@ -53,16 +55,17 @@ def save_image_from_api(ra, dec, width, height, opt, path='./images/', image_id=
     else:
         print("Failed to retrieve the image. Status code:", response.status_code)
 
-#operator curve
-resume_index=2870
-# for index, row in df.iterrows():
-for index, row in df.head(100).iterrows():
+#operator index
+for index, row in df.iterrows():
+# for index, row in df.head(100).iterrows():
+
+# resume_index=2870
 # for index, row in df.iloc[resume_index:].iterrows():
 
     ra = row['ra']
     dec = row['dec']
     phot_id = row['specobjid']
-    path='D:/galactic_images_raw/'
+    path='D:/galactic_images_production/'
     
     # print(ra, dec, phot_id, path)
     save_image_from_api(ra, dec, 512, 512,'',path, phot_id)
