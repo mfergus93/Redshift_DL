@@ -24,7 +24,7 @@ def flood_fill(o_img):
         
         # Flood fill operation
         cv2.floodFill(image=img, mask=mask, seedPoint=seed_point, newVal=255, \
-                      loDiff=50, upDiff=10, flags= 8 | ( 125 << 8 ) | cv2.FLOODFILL_FIXED_RANGE)
+                      loDiff=50, upDiff=10, flags= 8 | ( 255 << 8 ) | cv2.FLOODFILL_FIXED_RANGE)
         
         mask=mask[1:-1, 1:-1]
         

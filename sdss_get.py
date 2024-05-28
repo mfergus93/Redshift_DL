@@ -56,11 +56,11 @@ def save_image_from_api(ra, dec, width, height, opt, path='./images/', image_id=
         print("Failed to retrieve the image. Status code:", response.status_code)
 
 #operator index
-for index, row in df.iterrows():
+# for index, row in df.iterrows():
 # for index, row in df.head(100).iterrows():
 
-# resume_index=2870
-# for index, row in df.iloc[resume_index:].iterrows():
+resume_index=10000
+for index, row in df.iloc[resume_index:].iterrows():
 
     ra = row['ra']
     dec = row['dec']

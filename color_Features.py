@@ -24,9 +24,7 @@ def extract_color_histogram(color_image, mask):
     
     # image_size=color_image.shape[0]*color_image.shape[1]
     image_size=np.sum(mask)/255.0
-    h_hist=np.divide(h_hist, image_size)
-    s_hist=np.divide(s_hist, image_size)
-    v_hist=np.divide(v_hist, image_size)
+
     
     # cv2.normalize(h_hist, h_hist, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)
     # cv2.normalize(s_hist, s_hist, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)
@@ -45,5 +43,9 @@ def extract_color_histogram(color_image, mask):
         cv2.line(histImage, ( bin_w*(i-1), hist_h - int(v_hist[i-1]) ),
                             ( bin_w*(i), hist_h - int(v_hist[i]) ),
                             ( 0, 0, 255), thickness=2)
+        
+    h_hist=np.divide(h_hist, image_size)
+    s_hist=np.divide(s_hist, image_size)
+    v_hist=np.divide(v_hist, image_size)
     
     return histImage, h_hist, s_hist, v_hist

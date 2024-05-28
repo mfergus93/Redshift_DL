@@ -15,7 +15,7 @@ from flood_fill import flood_fill
 
 # folder_path= r'D:\galactic_images_raw'
 
-image_dir=r'D:\galactic_images_raw'
+image_dir=r'D:\galactic_images_production'
 labels = pd.read_csv(r'galaxy.csv')
 
 #this can probably get moved to a preprocessing file at some point
@@ -36,8 +36,12 @@ def preprocess_directory(path): #probably change this to preprocess image or bat
             # contour_img=pavlidis(flood_img)
             histogram_image, h_hist, s_hist, v_hist = extract_color_histogram(img, flood_img)
             # output_list.append([img, flood_img, histogram_image, h_hist, s_hist, v_hist])
-            feature_array=np.concatenate((h_hist, s_hist, v_hist), axis=1)
+            feature_array=np.concatenate((h_hist, s_hist, v_hist), axis=0)
             output_list.append([filename, feature_array])
+            
+            cv2.imshow('Galactic Image', histogram_image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
             
     return output_list
                     
@@ -56,7 +60,7 @@ def write_features(features):
         pickle.dump(features, f)
 
 
-features = preprocess_directory(r'D:\galactic_images_raw')
+features = preprocess_directory(image_dir)
 write_features(features)
 
 #%%
@@ -98,7 +102,7 @@ def ann(x,y):
     
     import tensorflow as tf
     from tensorflow.keras.models import Sequential
-    from tensorflow.keras.layers import Dense, Dropout
+    from tensorflow.keras.layers import Dense, Dropout, Input
     from sklearn.model_selection import train_test_split
     from tensorflow.keras.callbacks import EarlyStopping
     
@@ -107,7 +111,9 @@ def ann(x,y):
 
     # Define your model
     model = Sequential([
-        Dense(64, activation='relu', input_shape=input_shape),
+        
+        Input(shape=input_shape), 
+        Dense(64, activation='relu'),
         Dropout(0.2),  # Optional: helps prevent overfitting
         Dense(32, activation='relu'),
         Dropout(0.2),
@@ -118,11 +124,11 @@ def ann(x,y):
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
 
     # Define early stopping
-    early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+    # early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
 
     # Train the model with validation data and early stopping
-    history = model.fit(x_train, y_train, epochs=30, batch_size=32, validation_data=(x_test, y_test),
-                        callbacks=[early_stopping])
+    history = model.fit(x_train, y_train, epochs=30, batch_size=32, validation_data=(x_test, y_test))#,
+                        #callbacks=[early_stopping])
 
     # Evaluate the model on the test set
     loss, mae, mse = model.evaluate(x_test, y_test)
@@ -130,8 +136,11 @@ def ann(x,y):
 
     return model, loss, mae, mse, history, x_test, y_test
 
+#%%
 x,y=load_features(r'features')
 x,y=align_features_with_labels(x,y)
+x = x[:, :, 0]
+
 model, loss, mae, mse, history, x_test, y_test = ann(x,y)
 
 y_pred = model.predict(x_test)
@@ -139,9 +148,29 @@ errors=np.abs(y_pred-y_test)
 epsilon = 1e-8  # Small value to avoid division by zero
 percent_error = np.mean(errors / (y_test + epsilon)) * 100
 
+# from sklearn.neural_network import MLPRegressor
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import mean_absolute_error, mean_squared_error
+# x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.30, random_state=1)
 
+# model = MLPRegressor(hidden_layer_sizes=(64, 32),  # Two hidden layers with 64 and 32 neurons
+#                  activation='relu',  # ReLU activation function
+#                  solver='adam',  # Optimizer algorithm
+#                  max_iter=100,  # Maximum number of iterations
+#                  random_state=1)  # Random state for reproducibility
 
+# # Train the model
+# model.fit(x_train, y_train)
 
+# # Make predictions
+# y_pred = model.predict(x_test)
+
+# # Evaluate the model
+# mae = mean_absolute_error(y_test, y_pred)
+# mse = mean_squared_error(y_test, y_pred)
+
+# print(f'Mean Absolute Error: {mae}')
+# print(f'Mean Squared Error: {mse}')
 
 
 
