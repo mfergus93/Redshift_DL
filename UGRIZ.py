@@ -37,6 +37,8 @@ def get_ugriz_images(ra, dec, radius=0.05, retries=3, delay=2):
     sky_coords = coords.SkyCoord(ra, dec, unit="deg")
     bands = ['u', 'g', 'r', 'i', 'z']
     images = {}
+    
+    print(radius)
 
     for band in bands:
         attempt = 0
@@ -69,15 +71,21 @@ path='D:/galactic_images_ugriz/'
 
 BATCH_SIZE=100
 images_batch={}
-c=1
-batch_number=1
 
-for row in galaxies.itertuples(index=False):
+c=1
+batch_number=9
+start_idx = (batch_number-1) *BATCH_SIZE
+c = start_idx+1
+
+for idx, row in enumerate(galaxies.itertuples(index=False)):
+    if idx < start_idx:
+        continue
+    
     ra=row.ra
     dec=row.dec
     
     images = get_ugriz_images(ra, dec, radius=0.01408)
-    event=row.specobjid
+    event = row.specobjid
     images_batch[f"{event}"] = images
     
     if c % BATCH_SIZE == 0:
@@ -85,7 +93,7 @@ for row in galaxies.itertuples(index=False):
         images_batch.clear()
         batch_number+=1
         
-    c+=1
+    c += 1
         
 if images_batch:
     save_as_npz(images_batch, os.path.join(path, 'final_batch.npz'))
