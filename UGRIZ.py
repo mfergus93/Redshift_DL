@@ -38,7 +38,7 @@ def get_ugriz_images(ra, dec, radius=0.05, retries=3, delay=2):
     bands = ['u', 'g', 'r', 'i', 'z']
     images = {}
     
-    print(radius)
+    # print(radius)
 
     for band in bands:
         attempt = 0
@@ -85,6 +85,7 @@ for idx, row in enumerate(galaxies.itertuples(index=False)):
     dec=row.dec
     
     images = get_ugriz_images(ra, dec, radius=0.01408)
+    print('ugriz get success ', c)
     event = row.specobjid
     images_batch[f"{event}"] = images
     
