@@ -46,8 +46,7 @@ def get_ugriz_images(ra, dec, radius=0.05, retries=3, delay=2):
                 if img:
                     images[band] = img[0][0].data
                     imgshape=images[band].shape
-                    print('success')
-                    print(f"{band}-band image size: {imgshape}")
+
                 else:
                     print(f"Failed to retrieve {band}-band image.")
                 break  # Exit the retry loop if successful
