@@ -6,7 +6,7 @@ from astropy.visualization import ZScaleInterval
 
 path='D:/galactic_images_ugriz/'
 npz_file_path = os.path.join(path,'batch_1.npz')
-data = np.load(npz_file_path, allow_pickle=True)
+data = np.load(npz_file_path, allow_pickle=False)
 
 # Store each array in memory
 arrays = {key: data[key] for key in data.files}

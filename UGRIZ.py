@@ -60,7 +60,7 @@ BATCH_SIZE=100
 images_batch={}
 
 c=1
-batch_number=22
+batch_number=1
 start_idx = (batch_number-1) * BATCH_SIZE #remove the 2 later when batch size back to 100
 c = start_idx+1
 
@@ -100,8 +100,6 @@ for idx, row in enumerate(galaxies.itertuples(index=False)):
 if images_batch:
     save_as_npz(images_batch, os.path.join(path, 'final_batch.npz'))
         
-
-
 
 # Function to download 5-channel ugriz images for a given RA and Dec
 # def get_ugriz_images(ra, dec):
