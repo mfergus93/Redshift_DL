@@ -1,0 +1,18 @@
+SELECT TOP 200000
+  p.objid , p.ra , p.dec,
+  p.u,p.g,p.r,p.i,p.z,
+  p.psfMag_u , p.psfMag_g ,
+  p.psfMag_r , p.psfMag_i ,
+  p.psfMag_z , p.modelMag_u ,
+  p.modelMag_g , p.modelMag_r ,
+  p.modelMag_i , p.modelMag_z ,
+  s.specobjid , s.class ,
+  s.z AS redshift,
+  p.run, p.camcol, p.field
+INTO mydb.MyTable_1
+FROM PhotoObj AS p
+JOIN SpecObj AS s ON
+  s.bestobjid = p.objid
+WHERE s.z BETWEEN 0 AND 6.0
+AND s.class = 'GALAXY'
+ORDER BY NEWID ()
