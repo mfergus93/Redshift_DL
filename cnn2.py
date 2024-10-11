@@ -2,12 +2,25 @@ import h5py
 import os
 import torch.nn as nn
 from torchvision import transforms
+import pandas as pd
+
+galaxies = pd.read_csv('galaxy.csv')
+path = 'D:/galactic_images_ugriz/'
+hdf5_filename = os.path.join(path, 'ugriz_images_batch_1.h5')
+
+# def load_batch(filename):
+#     with h5py.File(filename, 'r') as h5f:
+#         images = h5f['data'][()]  # Adjust this key if needed
+#     return images
 
 def load_batch(filename):
     with h5py.File(filename, 'r') as h5f:
-        images = h5f['data'][()]  # Adjust this key if needed
-    return images
-
+        images = []
+        for dataset_name in h5f:
+            # Split the dataset name to extract galaxy_id and band
+            galaxy_id, band = dataset_name.split('_')
+            images.append([galaxy_id, band, h5f[dataset_name][()]])
+        return images
 
 # Optional: Preprocessing transformations
 transform = transforms.Compose([
@@ -46,5 +59,5 @@ def train_on_batches(path):
 def main():
     train_on_batches('D:/galactic_images_ugriz_test/')
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
