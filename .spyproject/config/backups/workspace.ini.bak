@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['..\\..\\..\\.spyder-py3\\temp.py', 'Flood_Fill.py', '..\\file_finder.py', '..\\Project_Euler\\Euler_4.py', '..\\Project_Euler\\Euler_5.py']
+recent_files = ['sdss_ugriz_get.py', 'main.py', 'sdss_get.py', 'ugriz_plotter.py', 'ugriz_load.py', 'UGRIZ.py', 'UGRIZ_Load_Test.py', 'ugriz_query.py']
 
 [main]
 version = 0.2.0

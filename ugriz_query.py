@@ -68,14 +68,16 @@ def get_total_directory_size(path):
 
 def batch_and_save(galaxies, batch_size=100, max_size_tb=1, max_batches=None, start_batch_number=1):
     path = 'D:/galactic_images_ugriz/'
-    batch_number = 1
+    batch_number = start_batch_number
     images_batch = []
     
     # # Calculate starting index based on the starting batch number
-    # start_idx = (start_batch_number - 1) * batch_size
-    # batch_number = start_batch_number
+    start_idx = (start_batch_number - 1) * batch_size
     
     for idx, row in galaxies.iterrows():
+        if idx<start_idx:
+            continue
+        
         ra = row.ra
         dec = row.dec
         
@@ -115,7 +117,7 @@ def batch_and_save(galaxies, batch_size=100, max_size_tb=1, max_batches=None, st
 def main():
     SDSS.clear_cache()
     galaxies = pd.read_csv('galaxy.csv')
-    batch_and_save(galaxies, batch_size=100, max_size_tb=2, max_batches=1000)
+    batch_and_save(galaxies, batch_size=100, max_size_tb=1, max_batches=1000, start_batch_number = 319)
 
 if __name__ == '__main__':
     main()

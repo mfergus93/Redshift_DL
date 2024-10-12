@@ -13,7 +13,7 @@ from astropy import units as u
 
 SDSS.clear_cache()
 
-def get_ugriz_images(ra, dec, radius=0.05, retries=3, delay=2):
+def get_ugriz_images(ra, dec, radius=0.05, retries=3, delay=2, width=0.05, height=0.05):
     
     sky_coords = coords.SkyCoord(ra, dec, unit="deg")
     bands = ['u', 'g', 'r', 'i', 'z']
@@ -25,7 +25,7 @@ def get_ugriz_images(ra, dec, radius=0.05, retries=3, delay=2):
         attempt = 0
         while attempt < retries:
             try:
-                img = SDSS.get_images(coordinates=sky_coords, band=band, radius=radius*u.deg)
+                img = SDSS.get_images(coordinates=sky_coords, band=band, width=width * u.deg, height=height * u.deg, cache=False) #radius=radius*u.deg)
                 if img:
                     images[band] = img[0][0].data
                     imgshape=images[band].shape
@@ -39,9 +39,6 @@ def get_ugriz_images(ra, dec, radius=0.05, retries=3, delay=2):
                 time.sleep(delay)  # Wait before retrying
 
     return images
-
-def save_as_npz(images, filename):
-    np.savez_compressed(filename, **images)
 
 def plot_images(images):
     zscale = ZScaleInterval()
@@ -62,7 +59,7 @@ def plot_images(images):
 galaxies = pd.read_csv('galaxy.csv')
 
 # Specify the row index you want to test (e.g., index 839 for c=840)
-row_index = 400  # Change this to your desired index
+row_index = 1  # Change this to your desired index
 row = galaxies.iloc[row_index]
 
 # Get RA and Dec for the specified row
@@ -70,7 +67,7 @@ ra = row.ra
 dec = row.dec
 
 # Get ugriz images
-images = get_ugriz_images(ra, dec, radius=0.01408)
+images = get_ugriz_images(ra, dec, radius=0.0005)
 print(f'ugriz get success for index {row_index}')
 
 # Plot the images

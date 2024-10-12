@@ -54,6 +54,7 @@ def train_on_batches(path):
     for filename in os.listdir(path):
         if filename.endswith('.h5'):
             images = load_batch(os.path.join(path, filename))
+            images = 
             train_on_batch(images)
 
 def main():
