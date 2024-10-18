@@ -5,7 +5,7 @@ import pandas as pd
 from tensorflow import keras
 from tensorflow.keras import layers
 from PIL import Image
-from ugriz_functions import filter_incomplete_bands, stack_bands_by_specobjid
+from photo_ugriz.ugriz_functions import filter_incomplete_bands, stack_bands_by_specobjid
 
 # Load the galaxy.csv DataFrame to get redshift labels
 galaxy_df = pd.read_csv('galaxy.csv')
