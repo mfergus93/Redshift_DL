@@ -1,84 +1,39 @@
 #main routine
 import os
-import cv2
 import numpy as np
 import pandas as pd
-import pickle
 
 folder_path=os.path.dirname(os.path.realpath(__file__))
 os.chdir(folder_path)
 
-from color_features import extract_color_histogram
-from flood_fill import flood_fill
-# from outlining import pavlidis, fillarea
-# from y_network import y_network
+from preproc.write_features import preprocess_directory, write_features, load_features
 
-# folder_path= r'D:\galactic_images_raw'
-
+#creates experimental sets of features
 image_dir=r'D:\galactic_images_production'
 labels = pd.read_csv(r'galaxy.csv')
 
-#this can probably get moved to a preprocessing file at some point
-#its written in such a way that all features have to be loaded into memory at once
-#if this becomes an issue then we can easily preprocess a batch of images and then write out
 
-def preprocess_directory(path): #probably change this to preprocess image or batch of images
-    
-    output_list=[]
-    for filename in os.listdir(path):
-        if filename.endswith('.jpg'):# or filename.endswith('.png'):
+image_sizes = [512, 256, 128, 64, 32]
+color_spaces = ['rgb', 'hsv']
+flood_fill_flags = [False, True]
+
+for size in image_sizes:
+    for color in color_spaces:
+        for flood_fill_flag in flood_fill_flags:
+            # Preprocess the directory
+            features = preprocess_directory(image_dir, color, flood_fill_flag, size)
             
-            file_path = os.path.join(path, filename)
-            img=cv2.imread(file_path)
-            # gray_img=cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
+            # Determine filename based on parameters
+            ff_status = 'ff' if flood_fill_flag else 'noff'
+            output_filename = f"features_{ff_status}_{color}_{size}"
             
-            # flood_img=flood_fill(gray_img)
-            # contour_img=pavlidis(flood_img)
-            no_mask = np.ones(img.shape[:2], dtype=np.uint8) * 255  # A mask filled with 255 (for 8-bit images)
-            histogram_image, h_hist, s_hist, v_hist = extract_color_histogram(img, no_mask)
-            # output_list.append([img, flood_img, histogram_image, h_hist, s_hist, v_hist])
-            feature_array=np.concatenate((h_hist, s_hist, v_hist), axis=0)
-            output_list.append([filename, feature_array])
+            # Write the features to file
+            write_features(features, output_filename)
             
-            # cv2.imshow('Galactic Image', histogram_image)
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
-            
-    return output_list
-                    
-
-#write all preprocessed images as pickled features for the model to a directory 
-def write_features(features):
-    # Create the features subfolder if it doesn't exist
-    if not os.path.exists('features'):
-        os.makedirs('features')
-    
-    # Define the file path to save the features.pkl file inside the features subfolder
-    file_path = os.path.join('features', 'features_noff.pkl')
-
-    # Write features to the file
-    with open(file_path, 'wb') as f:
-        pickle.dump(features, f)
-
-
-features = preprocess_directory(image_dir)
-write_features(features)
+            # Clear the variable to free up memory
+            del features
 
 #%%
-
-#call in the prerocessed features for the model
-def load_features(feature_directory):
-    
-    features_path = os.path.join(feature_directory, 'features_noff.pkl')
-    with open(features_path, 'rb') as input_file:
-        features = pickle.load(input_file)
-    x = features
-    
-    labels = pd.read_csv(r'galaxy.csv')
-    y=labels.iloc[:, [18, -1]]
-
-    
-    return x, y
 
 def strip_jpg_suffix(objid):
     return objid.split('.')[0]  # Splitting at the '.' and taking the first part

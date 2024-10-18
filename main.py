@@ -8,7 +8,7 @@ import pickle
 folder_path=os.path.dirname(os.path.realpath(__file__))
 os.chdir(folder_path)
 
-from color_features import extract_color_histogram
+from preproc.color_features import extract_rgb_histogram, extract_hsv_histogram
 from flood_fill import flood_fill
 # from outlining import pavlidis, fillarea
 # from y_network import y_network
@@ -22,28 +22,7 @@ labels = pd.read_csv(r'galaxy.csv')
 #its written in such a way that all features have to be loaded into memory at once
 #if this becomes an issue then we can easily preprocess a batch of images and then write out
 
-def preprocess_directory(path): #probably change this to preprocess image or batch of images
-    
-    output_list=[]
-    for filename in os.listdir(path):
-        if filename.endswith('.jpg'):# or filename.endswith('.png'):
-            
-            file_path = os.path.join(path, filename)
-            img=cv2.imread(file_path)
-            gray_img=cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
-            
-            flood_img=flood_fill(gray_img)
-            # contour_img=pavlidis(flood_img)
-            histogram_image, h_hist, s_hist, v_hist = extract_color_histogram(img, flood_img)
-            # output_list.append([img, flood_img, histogram_image, h_hist, s_hist, v_hist])
-            feature_array=np.concatenate((h_hist, s_hist, v_hist), axis=0)
-            output_list.append([filename, feature_array])
-            
-            # cv2.imshow('Galactic Image', histogram_image)
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
-            
-    return output_list
+
                     
 
 #write all preprocessed images as pickled features for the model to a directory 
